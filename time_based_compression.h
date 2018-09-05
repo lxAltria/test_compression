@@ -29,10 +29,10 @@ template<>
 unsigned char * SZ_compress_time_based<float>(float * oriData, int n1, int n2, int n3, double error_bound, size_t * out_size){
 	int status = SZ_SCES;
 	float valueRangeSize = 0, medianValue = 0;
-	double realPrecision = getRealPrecision_float(valueRangeSize, REL, 0, error_bound, &status);
 	size_t dataLength = n1 * n2 * n3;
 	float min = computeRangeSize_float(oriData, dataLength, &valueRangeSize, &medianValue);
 	float max = min+valueRangeSize;
+	double realPrecision = getRealPrecision_float(valueRangeSize, REL, 0, error_bound, &status);
 	TightDataPointStorageF* tdps = SZ_compress_float_1D_MDQ_ts(oriData, dataLength, multisteps, realPrecision, valueRangeSize, medianValue);;
 	unsigned char * comp_data;
 	convertTDPStoFlatBytes_float(tdps, &comp_data, out_size);
