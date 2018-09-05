@@ -56,6 +56,10 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 	char filename_tmp[200];
 	size_t total_size = 0;
 	size_t index = 1;
+	initSZ_TSC();
+	multisteps = (sz_multisteps*)malloc(sizeof(sz_multisteps));
+	memset(multisteps, 0, sizeof(sz_multisteps));
+	multisteps->hist_data = (float*)malloc(sizeof(float)*dataLength);
 	for(int i=0; i<interval_num; i++){
 		size_t out_size;
 		if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
@@ -79,6 +83,7 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 			free(comp_data);
 		}
 	}
+	free_multisteps(multisteps);
 	SZ_Finalize();
 	free(ori_data);
 	*out_size = total_size;
