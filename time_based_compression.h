@@ -8,17 +8,7 @@ unsigned char * SZ_compress_snapshot_based(Type * oriData, int n1, int n2, int n
 
 template<>
 unsigned char * SZ_compress_snapshot_based<float>(float * ori_data, int n1, int n2, int n3, double error_bound, size_t * out_size){
-	// int status = SZ_SCES;
-	// float valueRangeSize = 0, medianValue = 0;
-	// double realPrecision = getRealPrecision_float(valueRangeSize, REL, 0, error_bound, &status);
-	// size_t dataLength = n1 * n2 * n3;
-	// float min = computeRangeSize_float(oriData, dataLength, &valueRangeSize, &medianValue);
-	// float max = min+valueRangeSize;
-	// TightDataPointStorageF* tdps = SZ_compress_float_3D_MDQ(oriData, n1, n2, n3, realPrecision, valueRangeSize, medianValue);
-	// unsigned char * comp_data;
-	// convertTDPStoFlatBytes_float(tdps, &comp_data, out_size);
-	// free_TightDataPointStorageF(tdps);
-	unsigned char * comp_data = SZ_compress_args(SZ_FLOAT, ori_data, out_size, REL, error_bound, 0, 0, 0, 0, n1, n2, n3);
+	unsigned char * comp_data = SZ_compress_args(SZ_FLOAT, ori_data, out_size, REL, error_bound, error_bound, error_bound, 0, 0, n1, n2, n3);
 	return comp_data;
 }
 
@@ -119,6 +109,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 		readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
 		// decompress first snapshot
 		dec_data = (float *)SZ_decompress(SZ_FLOAT, comp_data, comp_data_size, 0, 0, n1, n2, n3);
+		writefile<float>(strcat(filename_tmp, ".out"), data, nbEle);
 		{
 			// verify
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
@@ -185,6 +176,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 			}
 			decompressDataSeries_float_1D_ts(&dec_data, n1*n2*n3, multisteps, tdps);	
 			free_TightDataPointStorageF2(tdps);
+			writefile<float>(strcat(filename_tmp, ".out"), data, nbEle);
 			{
 				// verify
 				if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
@@ -193,7 +185,6 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 				readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
 				verify(ori_data, dec_data, num_element, comp_data_size);
 			}
-
 			free(dec_data);
 		}
 	}
