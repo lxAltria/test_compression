@@ -25,7 +25,7 @@ Type * readfile(char * file, size_t * num){
 }
 
 template<typename Type>
-Type * readfile(char * file, size_t * num, Type * data){
+void readfile_to_buffer(char * file, size_t * num, Type * data){
     std::ifstream fin(file, std::ios::binary);
     if(!fin){
         std::cout << " Error, Couldn't find the file" << "\n";
