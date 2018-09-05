@@ -29,7 +29,7 @@ void readfile_to_buffer(char * file, size_t * num, Type * data){
     std::ifstream fin(file, std::ios::binary);
     if(!fin){
         std::cout << " Error, Couldn't find the file" << "\n";
-        return 0;
+        return;
     }
     fin.seekg(0, std::ios::end);
     const size_t num_elements = fin.tellg() / sizeof(Type);
@@ -37,7 +37,6 @@ void readfile_to_buffer(char * file, size_t * num, Type * data){
     fin.read(reinterpret_cast<char*>(&data[0]), num_elements*sizeof(Type));
     fin.close();
     *num = num_elements;
-    return data;
 }
 
 template<typename Type>
