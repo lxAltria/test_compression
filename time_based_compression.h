@@ -93,6 +93,10 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 template<typename Type>
 void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, int n1, int n2, int n3){
 	// SZ_Init(NULL);
+	if(confparams_dec==NULL)
+		confparams_dec = (sz_params*)malloc(sizeof(sz_params));
+	memset(confparams_dec, 0, sizeof(sz_params));
+
 	confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 	confparams_dec->predictionMode = SZ_PREVIOUS_VALUE_ESTIMATE;
 	size_t dataLength = n1 * n2 * n3;
@@ -105,6 +109,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 	// Type * dec_data = (Type *) malloc(sizeof(Type)*dataLength);
 	size_t comp_data_size = 0;
 	float * dec_data;
+	float * ori_data = (float *) malloc(sizeof(float)*dataLength);
 	char filename_tmp[200];
 	size_t index = 1;
 	for(int i=0; i<interval_num; i++){
@@ -114,6 +119,14 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 		readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
 		// decompress first snapshot
 		dec_data = (float *)SZ_decompress(SZ_FLOAT, comp_data, comp_data_size, 0, 0, n1, n2, n3);
+		{
+			// verify
+			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
+			else sprintf(filename_tmp, "%s%d.bin.dat", filename, index - 1);
+			size_t num_element;
+			readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
+			verify(ori_data, dec_data, num_element, comp_data_size);
+		}
 		free(dec_data);
 		for(int j=0; j<interval-1; j++){
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.comp", filename, index++);
@@ -172,11 +185,21 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 			}
 			decompressDataSeries_float_1D_ts(&dec_data, n1*n2*n3, multisteps, tdps);	
 			free_TightDataPointStorageF2(tdps);
+			{
+				// verify
+				if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
+				else sprintf(filename_tmp, "%s%d.bin.dat", filename, index - 1);
+				size_t num_element;
+				readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
+				verify(ori_data, dec_data, num_element, comp_data_size);
+			}
+
 			free(dec_data);
 		}
 	}
 	free_multisteps(multisteps);
 	// SZ_Finalize();
+	free(ori_data);
 	free(comp_data);
 }
 
