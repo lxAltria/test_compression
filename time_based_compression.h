@@ -91,7 +91,7 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 }
 
 template<typename Type>
-void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, int n1, int n2, int n3, size_t * out_size){
+void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, int n1, int n2, int n3){
 	// SZ_Init(NULL);
 	confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 	confparams_dec->predictionMode = SZ_PREVIOUS_VALUE_ESTIMATE;
@@ -108,7 +108,6 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 	char filename_tmp[200];
 	size_t index = 1;
 	for(int i=0; i<interval_num; i++){
-		size_t out_size;
 		if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.comp", filename, index++);
 		else sprintf(filename_tmp, "%s%d.bin.dat.comp", filename, index++);
 		std::cout << "Decompression Interval " << i << ":\nsnapshot 0: " << filename_tmp <<  std::endl;

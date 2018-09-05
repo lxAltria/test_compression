@@ -20,6 +20,7 @@ int main(int argc, char ** argv){
     double eb = atof(argv[7]);
     size_t out_size = 0;
     SZ_compression_in_time<float>(argv[1], snapshot_num, interval, eb, n1, n2, n3, &out_size);
+    SZ_decompression_in_time<float>(argv[1], snapshot_num, interval, n1, n2, n3);
     // verify(data, dec_data, nbEle, out_size);
     // free(comp_data);
     // free(data);
