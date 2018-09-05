@@ -109,7 +109,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 		readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
 		// decompress first snapshot
 		dec_data = (float *)SZ_decompress(SZ_FLOAT, comp_data, comp_data_size, 0, 0, n1, n2, n3);
-		writefile<float>(strcat(filename_tmp, ".out"), data, n1*n2*n3);
+		writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
 		{
 			// verify
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
@@ -176,7 +176,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 			}
 			decompressDataSeries_float_1D_ts(&dec_data, n1*n2*n3, multisteps, tdps);	
 			free_TightDataPointStorageF2(tdps);
-			writefile<float>(strcat(filename_tmp, ".out"), data, n1*n2*n3);
+			writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
 			{
 				// verify
 				if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
