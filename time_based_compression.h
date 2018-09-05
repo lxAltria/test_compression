@@ -61,7 +61,7 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 		else sprintf(filename_tmp, "%s%d.bin.dat", filename, index++);
 		std::cout << "Interval " << i << ": " << filename_tmp <<  std::endl;
 		// compress the first snapshot
-		ori_data = readfile<float>(filename_tmp, &num_element, ori_data);
+		readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
 		comp_data = SZ_compress_snapshot_based<float>(ori_data, n1, n2, n3, error_bound, &out_size);
 		writefile(strcat(filename_tmp, ".comp"), comp_data, out_size);
 		total_size += out_size;
@@ -71,7 +71,7 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 			std::cout << "snapshot " << j << ": " << filename_tmp <<  std::endl;
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat", filename, index++);
-			ori_data = readfile<float>(filename_tmp, &num_element, ori_data);
+			readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
 			comp_data = SZ_compress_time_based<float>(ori_data, n1, n2, n3, error_bound, &out_size);
 			writefile(strcat(filename_tmp, ".comp"), comp_data, out_size);
 			total_size += out_size;
