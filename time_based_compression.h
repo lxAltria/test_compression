@@ -8,14 +8,7 @@ unsigned char * SZ_compress_snapshot_based(Type * oriData, int n1, int n2, int n
 
 template<>
 unsigned char * SZ_compress_snapshot_based<float>(float * ori_data, int n1, int n2, int n3, double error_bound, size_t * out_size){
-	// unsigned char * comp_data = SZ_compress_args(SZ_FLOAT, ori_data, out_size, REL, error_bound, error_bound, error_bound, 0, 0, n1, n2, n3);
-	int status = SZ_SCES;
-	float valueRangeSize = 0, medianValue = 0;
-	size_t dataLength = n1 * n2 * n3;
-	float min = computeRangeSize_float(ori_data, dataLength, &valueRangeSize, &medianValue);
-	float max = min+valueRangeSize;
-	double realPrecision = getRealPrecision_float(valueRangeSize, REL, 0, error_bound, &status);
-	unsigned char * comp_data = SZ_compress_float_3D_MDQ_nonblocked_with_blocked_regression(ori_data, n1, n2, n3, realPrecision, out_size);
+	unsigned char * comp_data = SZ_compress_args(SZ_FLOAT, ori_data, out_size, REL, error_bound, error_bound, error_bound, 0, 0, n1, n2, n3);
 	return comp_data;
 }
 
@@ -115,8 +108,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 		std::cout << "Decompression Interval " << i << ":\nsnapshot 0: " << filename_tmp <<  std::endl;
 		readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
 		// decompress first snapshot
-		// dec_data = (float *)SZ_decompress(SZ_FLOAT, comp_data, comp_data_size, 0, 0, n1, n2, n3);
-		decompressDataSeries_float_3D_nonblocked_with_blocked_regression(&dec_data, n1, n2, n3, comp_data + 24);
+		dec_data = (float *)SZ_decompress(SZ_FLOAT, comp_data, comp_data_size, 0, 0, n1, n2, n3);
 		writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
 		{
 			// verify
