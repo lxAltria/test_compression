@@ -109,7 +109,6 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 		readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
 		// decompress first snapshot
 		dec_data = (float *)SZ_decompress(SZ_FLOAT, comp_data, comp_data_size, 0, 0, n1, n2, n3);
-		memcpy(multisteps->hist_data, dec_data, n1*n2*n3*sizeof(float));
 		writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
 		{
 			// verify
@@ -121,6 +120,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 		}
 		free(dec_data);
 		for(int j=0; j<interval-1; j++){
+			confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.comp", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat.comp", filename, index++);
 			std::cout << "snapshot " << j+1 << ": " << filename_tmp <<  std::endl;
