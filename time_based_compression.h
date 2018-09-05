@@ -46,7 +46,7 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 	confparams_cpr->szMode = SZ_TEMPORAL_COMPRESSION;
 	confparams_cpr->predictionMode = SZ_PREVIOUS_VALUE_ESTIMATE;
 	size_t dataLength = n1 * n2 * n3;
-	Type * ori_data;
+	Type * ori_data = (Type *) malloc(dataLength*sizeof(Type));
 
 	int interval_num = (snapshot_num - 1)/ interval;
 	TightDataPointStorageF* tdps = NULL;
@@ -54,21 +54,28 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 	size_t num_element;
 	char filename_tmp[200];
 	size_t total_size = 0;
+	size_t index = 1;
 	for(int i=0; i<interval_num; i++){
 		size_t out_size;
-		sprintf(filename_tmp, "%s%2d.bin.dat", filename, i);
+		sprintf(filename_tmp, "%s%2d.bin.dat", filename, index++);
 		// compress the first snapshot
-		ori_data = readfile<float>(filename_tmp, &num_element);
+		ori_data = readfile<float>(filename_tmp, &num_element, ori_data);
 		comp_data = SZ_compress_snapshot_based<float>(ori_data, n1, n2, n3, error_bound, &out_size);
-		// compress the following interval-1 snapshot in time
-		for(int j=0; j<interval-1; j++){
-			comp_data = SZ_compress_time_based<float>(ori_data, n1, n2, n3, error_bound, &out_size);
-		}
 		writefile(strcat(filename_tmp, ".comp"), comp_data, out_size);
 		total_size += out_size;
 		free(comp_data);
+		// compress the following interval-1 snapshot in time
+		for(int j=0; j<interval-1; j++){
+			sprintf(filename_tmp, "%s%2d.bin.dat", filename, index++);
+			ori_data = readfile<float>(filename_tmp, &num_element, ori_data);
+			comp_data = SZ_compress_time_based<float>(ori_data, n1, n2, n3, error_bound, &out_size);
+			writefile(strcat(filename_tmp, ".comp"), comp_data, out_size);
+			total_size += out_size;
+			free(comp_data);
+		}
 	}
 	SZ_Finalize();
+	free(ori_data);
 	*out_size = total_size;
 }
 
