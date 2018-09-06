@@ -27,6 +27,21 @@ unsigned char * SZ_compress_time_based<float>(float * oriData, int n1, int n2, i
 	unsigned char * comp_data;
 	convertTDPStoFlatBytes_float(tdps, &comp_data, out_size);
 	free_TightDataPointStorageF(tdps);
+	if(confparams_cpr->szMode==SZ_BEST_SPEED){
+		return comp_data;
+	}
+	else if(confparams_cpr->szMode==SZ_BEST_COMPRESSION || confparams_cpr->szMode==SZ_DEFAULT_COMPRESSION || confparams_cpr->szMode==SZ_TEMPORAL_COMPRESSION)
+	{
+		unsigned char * l_comp_data;
+		*out_size = sz_lossless_compress(confparams_cpr->losslessCompressor, confparams_cpr->gzipMode, comp_data, *out_size, &l_comp_data);
+		free(comp_data);
+		return l_comp_data;
+	}
+	else
+	{
+		printf("Error: Wrong setting of confparams_cpr->szMode in the float compression.\n");
+		status = SZ_MERR; //mode error			
+	}
 	return comp_data;
 }
 
@@ -119,8 +134,8 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 			verify(ori_data, dec_data, num_element, comp_data_size);
 		}
 		free(dec_data);
+		confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 		for(int j=0; j<interval-1; j++){
-			// confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.comp", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat.comp", filename, index++);
 			std::cout << "snapshot " << j+1 << ": " << filename_tmp <<  std::endl;
