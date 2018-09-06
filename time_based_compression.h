@@ -189,13 +189,11 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 					szTmpBytes = comp_data;
 				//TODO: convert szTmpBytes to data array.
 				int errBoundMode = new_TightDataPointStorageF_fromFlatBytes(&tdps, szTmpBytes, tmpSize);
+				decompressDataSeries_float_1D_ts(&dec_data, n1*n2*n3, multisteps, tdps);	
+				free_TightDataPointStorageF2(tdps);
+				writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
 				if(confparams_dec->szMode!=SZ_BEST_SPEED && comp_data_size!=8+MetaDataByteLength+exe_params->SZ_SIZE_TYPE)
-					free(szTmpBytes);			
-			}
-			decompressDataSeries_float_1D_ts(&dec_data, n1*n2*n3, multisteps, tdps);	
-			free_TightDataPointStorageF2(tdps);
-			writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
-			{
+					free(szTmpBytes);
 				// verify
 				if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
 				else sprintf(filename_tmp, "%s%d.bin.dat", filename, index - 1);
