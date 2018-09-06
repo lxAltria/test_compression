@@ -124,6 +124,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 		readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
 		// decompress first snapshot
 		dec_data = (float *)SZ_decompress(SZ_FLOAT, comp_data, comp_data_size, 0, 0, n1, n2, n3);
+		memcpy(multisteps->hist_data, dec_data, sizeof(Type)*n1*n2*n3);
 		writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
 		{
 			// verify
