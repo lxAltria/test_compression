@@ -136,6 +136,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 		}
 		free(dec_data);
 		confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
+		confparams_dec->predictionMode = SZ_PREVIOUS_VALUE_ESTIMATE;
 		for(int j=0; j<interval-1; j++){
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.comp", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat.comp", filename, index++);
