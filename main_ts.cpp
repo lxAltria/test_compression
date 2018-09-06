@@ -18,11 +18,13 @@ int main(int argc, char ** argv){
     int interval = atoi(argv[6]);
     // argv[7] eb in time/snapshot, may be separted later
     double eb = atof(argv[7]);
+    // argv[8] snapshot based sampling interval
+    int snapshot_blocksize = atoi(argv[8]);
     size_t out_size = 0;
-    SZ_compression_in_time<float>(argv[1], snapshot_num, interval, eb, n1, n2, n3, &out_size);
-    SZ_decompression_in_time<float>(argv[1], snapshot_num, interval, n1, n2, n3);
-    // verify(data, dec_data, nbEle, out_size);
-    // free(comp_data);
-    // free(data);
-    // free(dec_data);
+    // SZ_compression_in_time<float>(argv[1], snapshot_num, interval, eb, n1, n2, n3, &out_size);
+    // SZ_decompression_in_time<float>(argv[1], snapshot_num, interval, n1, n2, n3);
+
+    decimation_sample_in_time_and_space<float>(argv[1], snapshot_num, interval, snapshot_blocksize, n1, n2, n3);
+    decimation_interpolate_in_time_and_space<float>(argv[1], snapshot_num, interval, snapshot_blocksize, n1, n2, n3, TRICUBIC);
+
 }
