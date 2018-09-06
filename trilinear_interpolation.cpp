@@ -50,6 +50,7 @@ Type * trilinear_interpolation(Type * comp_data, int block_size, int n1, int n2,
 			}
 		}
 	}
+	free(coeff);
 	return dec_data;
 }
 

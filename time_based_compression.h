@@ -467,6 +467,9 @@ void interpolate_snapshot_and_SZ_decompression_in_time(char * filename, int snap
 	if(confparams_dec==NULL)
 		confparams_dec = (sz_params*)malloc(sizeof(sz_params));
 	memset(confparams_dec, 0, sizeof(sz_params));
+	if(exe_params==NULL)
+		exe_params = (sz_exedata*)malloc(sizeof(sz_exedata));
+	memset(exe_params, 0, sizeof(sz_exedata));
 
 	confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 	confparams_dec->predictionMode = SZ_PREVIOUS_VALUE_ESTIMATE;
@@ -479,15 +482,17 @@ void interpolate_snapshot_and_SZ_decompression_in_time(char * filename, int snap
 	unsigned char * comp_data = (unsigned char *) malloc(sizeof(Type)*dataLength);
 	// Type * dec_data = (Type *) malloc(sizeof(Type)*dataLength);
 	size_t comp_data_size = 0;
-	float * dec_data;
+	Type * dec_data;
 	Type * ori_data = (Type *) malloc(sizeof(Type)*dataLength);
 	char filename_tmp[200];
 	size_t index = 1;
+	size_t total_size = 0;
 	for(int i=0; i<interval_num; i++){
 		if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.dsszt", filename, index++);
 		else sprintf(filename_tmp, "%s%d.bin.dat.dsszt", filename, index++);
 		std::cout << "Decompression Interval " << i << ":\nsnapshot 0: " << filename_tmp <<  std::endl;
 		readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
+		total_size += comp_data_size;
 		// decompress first snapshot
 		{
 			// decompression & record history
@@ -512,6 +517,7 @@ void interpolate_snapshot_and_SZ_decompression_in_time(char * filename, int snap
 			else sprintf(filename_tmp, "%s%d.bin.dat.dsszt", filename, index++);
 			std::cout << "snapshot " << j+1 << ": " << filename_tmp <<  std::endl;
 			readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
+			total_size += comp_data_size;
 			TightDataPointStorageF* tdps;
 			{
 				int status = SZ_SCES;
@@ -576,6 +582,7 @@ void interpolate_snapshot_and_SZ_decompression_in_time(char * filename, int snap
 			free(dec_data);
 		}
 	}
+	std::cout << "Total compression ratio: " << n1*n2*n3*sizeof(Type) * 1.0 * (interval_num * interval) / total_size << std::endl; 
 	free_multisteps(multisteps);
 	// SZ_Finalize();
 	free(ori_data);
