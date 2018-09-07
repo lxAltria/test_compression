@@ -32,7 +32,7 @@ def get_statistics(var, snapshot_num, interval, mode):
 #./compression_ts /lcrc/project/ECP-EZ/public/compression/test_data/Hurricane/Uf 100 500 500 48 1 1e-3 4 0 0
 def run_szst(interval, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
-	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf48", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
+	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
 	error_bounds = np.array(["1e-1", "1e-2", "1e-3", "1e-4"])
 	interval_num = (48 - 1) // interval
 	actual_snapshot = interval_num * interval
@@ -53,7 +53,7 @@ def run_szst(interval, executable="/home/xin/codes/test_compression/compression_
 
 def run_szsdt(interval, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
-	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf48", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
+	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
 	interval_in_space = np.array(["1", "2", "3", "4", "5", "6"])
 	interval_num = (48 - 1) // interval
 	actual_snapshot = interval_num * interval
@@ -74,7 +74,7 @@ def run_szsdt(interval, executable="/home/xin/codes/test_compression/compression
 
 def run_dsszt(interval, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
-	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf48", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
+	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
 	error_bounds = np.array(["1e-1", "1e-2", "1e-3", "1e-4"])
 	interval_in_space = np.array(["1", "2", "3", "4", "5", "6"])
 	interval_num = (48 - 1) // interval
@@ -98,7 +98,7 @@ def run_dsszt(interval, executable="/home/xin/codes/test_compression/compression
 
 def run_dst(interval, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
-	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf48", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
+	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
 	interval_in_space = np.array(["1", "2", "3", "4", "5", "6"])
 	interval_num = (48 - 1) // interval
 	actual_snapshot = interval_num * interval

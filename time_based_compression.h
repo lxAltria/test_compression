@@ -279,7 +279,7 @@ void decimation_sample_in_time_and_space(char * filename, int snapshot_num, int 
 		writefile(strcat(filename_tmp, ".dst"), comp_data, out_size/sizeof(Type));
 		free(comp_data);
 		// skip interval_num snapshots
-		index += interval_num;
+		index += interval;
 	}
 	free(ori_data);
 	std::cout << "DST compression time: " << elapsed_time << " s, compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << " MB/s" << std::endl;
@@ -308,7 +308,7 @@ void decimation_interpolate_in_time_and_space(char * filename, int snapshot_num,
 		else dec_data[i] = trilinear_interpolation(comp_data, snapshot_blocksize, n1, n2, n3);
 		cost_end();
 		elapsed_time += totalCost;
-		index += interval_num;
+		index += interval;
 		total_size += comp_data_size*sizeof(Type);
 	}
 	free(comp_data);
@@ -386,7 +386,7 @@ void SZ_compress_snapshot_and_decimation_in_time(char * filename, int snapshot_n
 		writefile(strcat(filename_tmp, ".szsdt"), comp_data, out_size);
 		free(comp_data);
 		// skip interval_num snapshots
-		index += interval_num;
+		index += interval;
 		total_size += out_size;
 	}
 	free(ori_data);
@@ -415,7 +415,7 @@ void SZ_decompress_snapshot_and_interpolate_in_time(char * filename, int snapsho
 		dec_data[i] = (Type *)SZ_decompress(SZ_FLOAT, comp_data, comp_data_size, 0, 0, n1, n2, n3);
 		cost_end();
 		elapsed_time += totalCost;
-		index += interval_num;
+		index += interval;
 		total_size += comp_data_size;
 	}
 	free(comp_data);
