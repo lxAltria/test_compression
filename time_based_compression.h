@@ -294,11 +294,11 @@ void decimation_interpolate_in_time_and_space(char * filename, int snapshot_num,
 	size_t index = 1;
 	size_t num_element;
 	Type * comp_data = (Type *) malloc(sizeof(Type)*n1*n2*n3);
-	Type ** dec_data = (Type **) malloc(sizeof(Type *)*interval_num);
+	Type ** dec_data = (Type **) malloc(sizeof(Type *)*(interval_num + 1));
 	size_t comp_data_size;
 	size_t total_size = 0;
 	double elapsed_time = 0.0;
-	for(int i=0; i<interval_num; i++){
+	for(int i=0; i<interval_num + 1; i++){
 		// decompress the first snapshot
 		if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.dst", filename, index);
 		else sprintf(filename_tmp, "%s%d.bin.dat.dst", filename, index);
@@ -354,7 +354,7 @@ void decimation_interpolate_in_time_and_space(char * filename, int snapshot_num,
 	}
 	free(ori_data);
 	free(dec_buffer);
-	for(int i=0; i<interval_num; i++){
+	for(int i=0; i<interval_num + 1; i++){
 		free(dec_data[i]);
 	}
 	free(dec_data);
@@ -402,11 +402,11 @@ void SZ_decompress_snapshot_and_interpolate_in_time(char * filename, int snapsho
 	size_t index = 1;
 	size_t num_element;
 	unsigned char * comp_data = (unsigned char *) malloc(sizeof(Type)*n1*n2*n3);
-	Type ** dec_data = (Type **) malloc(sizeof(Type *)*interval_num);
+	Type ** dec_data = (Type **) malloc(sizeof(Type *)*(interval_num + 1));
 	size_t comp_data_size;
 	size_t total_size = 0;
 	double elapsed_time = 0;
-	for(int i=0; i<interval_num; i++){
+	for(int i=0; i<interval_num + 1; i++){
 		// decompress the first snapshot
 		if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.szsdt", filename, index);
 		else sprintf(filename_tmp, "%s%d.bin.dat.szsdt", filename, index);
@@ -461,7 +461,7 @@ void SZ_decompress_snapshot_and_interpolate_in_time(char * filename, int snapsho
 	}
 	free(ori_data);
 	free(dec_buffer);
-	for(int i=0; i<interval_num; i++){
+	for(int i=0; i<interval_num + 1; i++){
 		free(dec_data[i]);
 	}
 	free(dec_data);
