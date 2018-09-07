@@ -123,7 +123,7 @@ void SZ_compression_in_time(char * filename, int snapshot_num, int interval, dou
 	SZ_Finalize();
 	free(ori_data);
 	*out_size = total_size;
-	std::cout << "SZST compression time: " << elapsed_time << ", compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time << std::endl;
+	std::cout << "SZST compression time: " << elapsed_time << "s, compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << "MB/s" << std::endl;
 }
 
 template<typename Type>
@@ -248,7 +248,7 @@ void SZ_decompression_in_time(char * filename, int snapshot_num, int interval, i
 	// SZ_Finalize();
 	free(ori_data);
 	free(comp_data);
-	std::cout << "SZST decompression time: " << elapsed_time << ", decompression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time << std::endl;
+	std::cout << "SZST decompression time: " << elapsed_time << "  sdecompression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << "MB/s" << std::endl;
 }
 
 // template<>
@@ -282,7 +282,7 @@ void decimation_sample_in_time_and_space(char * filename, int snapshot_num, int 
 		index += interval_num;
 	}
 	free(ori_data);
-	std::cout << "DST compression time: " << elapsed_time << ", compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time << std::endl;
+	std::cout << "DST compression time: " << elapsed_time << "s, compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << "MB/s" << std::endl;
 }
 
 #define TRICUBIC 0
@@ -357,7 +357,7 @@ void decimation_interpolate_in_time_and_space(char * filename, int snapshot_num,
 		free(dec_data[i]);
 	}
 	free(dec_data);
-	std::cout << "DST decompression time: " << elapsed_time << ", decompression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time << std::endl;
+	std::cout << "DST decompression time: " << elapsed_time << "  sdecompression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << "MB/s" << std::endl;
 }
 
 template<typename Type>
@@ -390,7 +390,7 @@ void SZ_compress_snapshot_and_decimation_in_time(char * filename, int snapshot_n
 	}
 	free(ori_data);
 	SZ_Finalize();
-	std::cout << "SZSDT compression time: " << elapsed_time << ", compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time << std::endl;
+	std::cout << "SZSDT compression time: " << elapsed_time << "s, compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << "MB/s" << std::endl;
 }
 
 template<typename Type>
@@ -464,7 +464,7 @@ void SZ_decompress_snapshot_and_interpolate_in_time(char * filename, int snapsho
 	}
 	free(dec_data);
 	SZ_Finalize();
-	std::cout << "SZSDT decompression time: " << elapsed_time << ", decompression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time << std::endl;
+	std::cout << "SZSDT decompression time: " << elapsed_time << "  sdecompression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << "MB/s" << std::endl;
 }
 
 template<typename Type>
@@ -532,7 +532,7 @@ void decimation_snapshot_and_SZ_compression_in_time(char * filename, int snapsho
 	SZ_Finalize();
 	free(ori_data);
 	*out_size = total_size;
-	std::cout << "DSSZT compression time: " << elapsed_time << ", compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time << std::endl;
+	std::cout << "DSSZT compression time: " << elapsed_time << "s, compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << "MB/s" << std::endl;
 }
 
 
@@ -591,7 +591,7 @@ void interpolate_snapshot_and_SZ_decompression_in_time(char * filename, int snap
 		free(dec_data);
 		confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 		confparams_dec->predictionMode = SZ_PREVIOUS_VALUE_ESTIMATE;
-		for(int j=0; j<interval; j++){
+		for(int j=0; j<interval - 1; j++){
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.dsszt", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat.dsszt", filename, index++);
 			std::cout << "snapshot " << j+1 << ": " << filename_tmp <<  std::endl;
@@ -669,7 +669,7 @@ void interpolate_snapshot_and_SZ_decompression_in_time(char * filename, int snap
 	// SZ_Finalize();
 	free(ori_data);
 	free(comp_data);
-	std::cout << "DSSZT decompression time: " << elapsed_time << ", decompression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time << std::endl;
+	std::cout << "DSSZT decompression time: " << elapsed_time << "  sdecompression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << "MB/s" << std::endl;
 }
 
 #endif
