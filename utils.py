@@ -90,7 +90,7 @@ def run_dsszt(interval, executable="/home/xin/codes/test_compression/compression
 				total_br = np.zeros([error_bounds.size])
 				total_psnr = np.zeros([error_bounds.size])
 				for j in range(error_bounds.size):
-					os.system("{} {}/{} 100 500 500 48 {} {} {} 0 0".format(executable, directory, var, interval, error_bounds[j], space))
+					os.system("{} {}/{} 100 500 500 48 {} {} {} 0 2".format(executable, directory, var, interval, error_bounds[j], space))
 					cr[j, :], psnr[j, :], nrmse[j, :], total_br[j], total_psnr[j] = get_statistics("{}/{}".format(directory, var), 48, interval, mode)
 				np.savetxt("{}_{}_{}_{}_{}_cr.txt".format(var, mode, interval, space, p), cr)
 				np.savetxt("{}_{}_{}_{}_{}_psnr.txt".format(var, mode, interval, space, p), psnr)
