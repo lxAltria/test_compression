@@ -54,19 +54,19 @@ def run_szst(interval, executable="/home/xin/codes/test_compression/compression_
 def run_szsdt(interval, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
 	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
-	interval_in_space = np.array(["1", "2", "3", "4", "5", "6"])
+	error_bounds = np.array(["1e-1", "1e-2", "1e-3", "1e-4"])
 	interval_num = (48 - 1) // interval
 	actual_snapshot = interval_num * interval
 	mode = "szsdt"
 	for i in range(variables.size):
 		var = variables[i]
-		cr = np.zeros([interval_in_space.size, actual_snapshot])
-		psnr = np.zeros([interval_in_space.size, actual_snapshot])
-		nrmse = np.zeros([interval_in_space.size, actual_snapshot])
-		total_br = np.zeros([interval_in_space.size])
-		total_psnr = np.zeros([interval_in_space.size])
-		for j in range(interval_in_space.size):
-			os.system("{} {}/{} 100 500 500 48 {} 0 {} 0 1".format(executable, directory, var, interval, interval_in_space[j]))
+		cr = np.zeros([error_bounds.size, actual_snapshot])
+		psnr = np.zeros([error_bounds.size, actual_snapshot])
+		nrmse = np.zeros([error_bounds.size, actual_snapshot])
+		total_br = np.zeros([error_bounds.size])
+		total_psnr = np.zeros([error_bounds.size])
+		for j in range(error_bounds.size):
+			os.system("{} {}/{} 100 500 500 48 {} {} 0 0 1".format(executable, directory, var, interval, error_bounds[j]))
 			cr[j, :], psnr[j, :], nrmse[j, :], total_br[j], total_psnr[j] = get_statistics("{}/{}".format(directory, var), 48, interval, mode)
 		np.savetxt("{}_{}_{}_cr.txt".format(var, mode, interval), cr)
 		np.savetxt("{}_{}_{}_psnr.txt".format(var, mode, interval), psnr)
@@ -90,7 +90,7 @@ def run_dsszt(interval, executable="/home/xin/codes/test_compression/compression
 				total_br = np.zeros([error_bounds.size])
 				total_psnr = np.zeros([error_bounds.size])
 				for j in range(error_bounds.size):
-					os.system("{} {}/{} 100 500 500 48 {} {} {} 0 2".format(executable, directory, var, interval, error_bounds[j], space))
+					os.system("{} {}/{} 100 500 500 48 {} {} {} {} 2".format(executable, directory, var, interval, error_bounds[j], space, p))
 					cr[j, :], psnr[j, :], nrmse[j, :], total_br[j], total_psnr[j] = get_statistics("{}/{}".format(directory, var), 48, interval, mode)
 				np.savetxt("{}_{}_{}_{}_{}_cr.txt".format(var, mode, interval, space, p), cr)
 				np.savetxt("{}_{}_{}_{}_{}_psnr.txt".format(var, mode, interval, space, p), psnr)
