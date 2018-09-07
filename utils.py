@@ -17,8 +17,8 @@ def get_statistics(var, snapshot_num, interval, mode):
 	nrmse = np.zeros([actual_snapshot])
 	psnr = np.zeros([actual_snapshot])
 	for i in range(actual_snapshot):
-		data = np.fromfile("{}{:02d}.bin.dat".format(var, index), dtype=np.float32)
-		dec_data = np.fromfile("{}{:02d}.bin.dat.{}.out".format(var, index, mode), dtype=np.float32)
+		data = np.fromfile("{}{:02d}.bin.dat".format(var, index), dtype=np.float32)#.reshape([100, 500, 500])[10:80, 10:480, 10:480]
+		dec_data = np.fromfile("{}{:02d}.bin.dat.{}.out".format(var, index, mode), dtype=np.float32)#.reshape([100, 500, 500])[10:80, 10:480, 10:480]
 		origin_size = os.path.getsize("{}{:02d}.bin.dat".format(var, index))
 		compressed_size = os.path.getsize("{}{:02d}.bin.dat.{}".format(var, index, mode))
 		cr[i] = origin_size * 1.0 / compressed_size
@@ -42,8 +42,8 @@ def run_szst(interval, executable="/home/xin/codes/test_compression/compression_
 		cr = np.zeros([error_bounds.size, actual_snapshot])
 		psnr = np.zeros([error_bounds.size, actual_snapshot])
 		nrmse = np.zeros([error_bounds.size, actual_snapshot])
-		total_br = np.zeros([error_bounds])
-		total_psnr = np.zeros([error_bounds])
+		total_br = np.zeros([error_bounds.size])
+		total_psnr = np.zeros([error_bounds.size])
 		for j in range(error_bounds.size):
 			os.system("{} {}/{} 100 500 500 48 {} {} 0 0 0".format(executable, directory, var, interval, error_bounds[j]))
 			cr[j, :], psnr[j, :], nrmse[j, :], total_br[j], total_psnr[j] = get_statistics(var, 48, interval, mode)
@@ -63,8 +63,8 @@ def run_szsdt(interval, executable="/home/xin/codes/test_compression/compression
 		cr = np.zeros([interval_in_space.size, actual_snapshot])
 		psnr = np.zeros([interval_in_space.size, actual_snapshot])
 		nrmse = np.zeros([interval_in_space.size, actual_snapshot])
-		total_br = np.zeros([interval_in_space])
-		total_psnr = np.zeros([interval_in_space])
+		total_br = np.zeros([interval_in_space.size])
+		total_psnr = np.zeros([interval_in_space.size])
 		for j in range(interval_in_space.size):
 			os.system("{} {}/{} 100 500 500 48 {} 0 {} 0 1".format(executable, directory, var, interval, interval_in_space[j]))
 			cr[j, :], psnr[j, :], nrmse[j, :], total_br[j], total_psnr[j] = get_statistics(var, 48, interval, mode)
@@ -87,8 +87,8 @@ def run_dsszt(interval, executable="/home/xin/codes/test_compression/compression
 				cr = np.zeros([error_bounds.size, actual_snapshot])
 				psnr = np.zeros([error_bounds.size, actual_snapshot])
 				nrmse = np.zeros([error_bounds.size, actual_snapshot])
-				total_br = np.zeros([error_bounds])
-				total_psnr = np.zeros([error_bounds])
+				total_br = np.zeros([error_bounds.size])
+				total_psnr = np.zeros([error_bounds.size])
 				for j in range(error_bounds.size):
 					os.system("{} {}/{} 100 500 500 48 {} {} {} 0 0".format(executable, directory, var, interval, error_bounds[j], space))
 					cr[j, :], psnr[j, :], nrmse[j, :], total_br[j], total_psnr[j] = get_statistics(var, 48, interval, mode)
@@ -109,8 +109,8 @@ def run_dst(interval, executable="/home/xin/codes/test_compression/compression_t
 			cr = np.zeros([interval_in_space.size, actual_snapshot])
 			psnr = np.zeros([interval_in_space.size, actual_snapshot])
 			nrmse = np.zeros([interval_in_space.size, actual_snapshot])
-			total_br = np.zeros([interval_in_space])
-			total_psnr = np.zeros([interval_in_space])
+			total_br = np.zeros([interval_in_space.size])
+			total_psnr = np.zeros([interval_in_space.size])
 			for j in range(interval_in_space.size):
 				os.system("{} {}/{} 100 500 500 48 {} 0 {} {} 3".format(executable, directory, var, interval, interval_in_space[j], p))
 				cr[j, :], psnr[j, :], nrmse[j, :], total_br[j], total_psnr[j] = get_statistics(var, 48, interval, mode)
