@@ -16,7 +16,7 @@ int main(int argc, char ** argv){
     int snapshot_num = atoi(argv[5]);
     // argv[6] interval
     int interval = atoi(argv[6]);
-    // argv[7] eb in time/snapshot, may be separted later
+    // argv[7] eb in time/snapshot, may be separated later
     double eb = atof(argv[7]);
     // argv[8] snapshot based sampling interval
     int snapshot_blocksize = atoi(argv[8]);
