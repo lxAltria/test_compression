@@ -8,12 +8,12 @@ def get_total_rate_distortion(nrmse, cr):
 	return total_br, total_psnr
 
 def get_psnr_and_nrmse(data, dec_data):
-        data_range = np.max(data) - np.min(data)
-        diff = data - dec_data
-        rmse = np.sqrt(np.mean(diff**2))
-        psnr = 20 * np.log10(data_range / rmse)
-        nrmse = rmse / data_range
-        return psnr, nrmse
+    data_range = np.max(data) - np.min(data)
+    diff = data - dec_data
+    rmse = np.sqrt(np.mean(diff**2))
+    psnr = 20 * np.log10(data_range / rmse)
+    nrmse = rmse / data_range
+    return psnr, nrmse
 
 def get_statistics_1D(var, snapshot_num, interval, mode):
 	interval_num = (snapshot_num - 1) // interval
