@@ -67,11 +67,11 @@ Type * trilinear_interpolation(Type * comp_data, int block_size, int n1, int n2,
 		for(int i=0; i<block_size; i++){
 			coeff[i] = i * 1.0 / block_size;
 		}
-		for(int i=0; i<nx; i++){
+		for(int i=0; i<nz; i++){
 			int bsi = block_size;
             if(i*block_size + block_size > n3) bsi = n3 - i*block_size - block_size;
-			for(int ii=0; ii<bsi; i++){
-				*(dec_data_pos++) = (1 - coeff[ii]) * comp_data[_get_index_1D(i, nx)] + coeff[ii] * comp_data[_get_index_1D(i+1, nx)];
+			for(int ii=0; ii<bsi; ii++){
+				*(dec_data_pos++) = (1 - coeff[ii]) * comp_data[_get_index_1D(i, nz)] + coeff[ii] * comp_data[_get_index_1D(i+1, nz)];
 			}
 		}
 		return dec_data;
