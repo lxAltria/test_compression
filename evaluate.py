@@ -136,15 +136,15 @@ def interpolation_in_space_3D(index, option, mode=3, executable="/home/xin/codes
 def sz_in_space_3D(index, option=0, mode=0, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
 	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
-    modes = np.array(["szst", "szsdt", "dsszt", "dst"])
-    var = variables[index]
-    interval = 1
-    interval_num = (48 - 1) // interval
-    actual_snapshot = interval_num * interval
-    sampling_dist = np.array(["1e-1", "1e-2", "1e-3", "1e-4", "1e-5"])
-    br = np.zeros([sampling_dist.size, actual_snapshot])
-    psnr = np.zeros([sampling_dist.size, actual_snapshot])
-    nrmse = np.zeros([sampling_dist.size, actual_snapshot])
+	modes = np.array(["szst", "szsdt", "dsszt", "dst"])
+	var = variables[index]
+	interval = 1
+	interval_num = (48 - 1) // interval
+	actual_snapshot = interval_num * interval
+	sampling_dist = np.array(["1e-1", "1e-2", "1e-3", "1e-4", "1e-5"])
+	br = np.zeros([sampling_dist.size, actual_snapshot])
+	psnr = np.zeros([sampling_dist.size, actual_snapshot])
+	nrmse = np.zeros([sampling_dist.size, actual_snapshot])
     for i in range(sampling_dist.size):
         os.system("{} {}/{} 100 500 500 48 1 {} 1 {} {}".format(executable, directory, var, sampling_dist[i], option, mode))
         br[i, :], psnr[i, :], nrmse[i, :] = get_statistics_3D("{}/{}".format(directory, var), 48, 1, modes[mode])
