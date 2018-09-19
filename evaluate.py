@@ -145,12 +145,12 @@ def sz_in_space_3D(index, option=0, mode=0, executable="/home/xin/codes/test_com
 	br = np.zeros([sampling_dist.size, actual_snapshot])
 	psnr = np.zeros([sampling_dist.size, actual_snapshot])
 	nrmse = np.zeros([sampling_dist.size, actual_snapshot])
-    for i in range(sampling_dist.size):
-        os.system("{} {}/{} 100 500 500 48 1 {} 1 {} {}".format(executable, directory, var, sampling_dist[i], option, mode))
-        br[i, :], psnr[i, :], nrmse[i, :] = get_statistics_3D("{}/{}".format(directory, var), 48, 1, modes[mode])
-    np.savetxt("{}_{}_{}_snapshot_br.txt".format(var, option, mode), br)
-    np.savetxt("{}_{}_{}_snapshot_psnr.txt".format(var, option, mode), psnr)
-    np.savetxt("{}_{}_{}_snapshot_nrmse.txt".format(var, option, mode), nrmse)
+	for i in range(sampling_dist.size):
+		os.system("{} {}/{} 100 500 500 48 1 {} 1 {} {}".format(executable, directory, var, sampling_dist[i], option, mode))
+		br[i, :], psnr[i, :], nrmse[i, :] = get_statistics_3D("{}/{}".format(directory, var), 48, 1, modes[mode])
+	np.savetxt("{}_{}_{}_snapshot_br.txt".format(var, option, mode), br)
+	np.savetxt("{}_{}_{}_snapshot_psnr.txt".format(var, option, mode), psnr)
+	np.savetxt("{}_{}_{}_snapshot_nrmse.txt".format(var, option, mode), nrmse)
 
 def interpolation_in_time_3D(index, interval, mode=3, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
