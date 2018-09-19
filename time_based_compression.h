@@ -274,13 +274,23 @@ void decimation_sample_in_time_and_space(char * filename, int snapshot_num, int 
 		// std::cout << "Interval " << i << ":\nsnapshot 0: " << filename_tmp <<  std::endl;
 		// compress the first snapshot
 		readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
-		cost_start();
-		Type * comp_data = uniform_sampling(ori_data, snapshot_blocksize, n1, n2, n3, &out_size);
-		cost_end();
-		elapsed_time += totalCost;
-		writefile(strcat(filename_tmp, ".dst"), comp_data, out_size/sizeof(Type));
-		free(comp_data);
+		if(snapshot_blocksize > 1){
+			cost_start();
+			Type * comp_data = uniform_sampling(ori_data, snapshot_blocksize, n1, n2, n3, &out_size);
+			cost_end();
+			elapsed_time += totalCost;
+			writefile(strcat(filename_tmp, ".dst"), comp_data, out_size/sizeof(Type));
+			free(comp_data);
+		}
+		else{
+			writefile(strcat(filename_tmp, ".dst"), ori_data, sizeof(Type)*num_element);
+		}
 		// skip interval_num snapshots
+		for(int j=0; j<interval-1; j++){
+			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
+			else sprintf(filename_tmp, "%s%d.bin.dat", filename, index++);
+			writefile(strcat(filename_tmp, ".dst"), ori_data, 0);
+		}
 		index += interval;
 	}
 	free(ori_data);
@@ -305,10 +315,16 @@ void decimation_interpolate_in_time_and_space(char * filename, int snapshot_num,
 		if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat.dst", filename, index);
 		else sprintf(filename_tmp, "%s%d.bin.dat.dst", filename, index);
 		readfile_to_buffer(filename_tmp, &comp_data_size, comp_data);
-		cost_start();
-		if(option == TRICUBIC) dec_data[i] = tricubic_interpolation(comp_data, snapshot_blocksize, n1, n2, n3);
-		else dec_data[i] = trilinear_interpolation(comp_data, snapshot_blocksize, n1, n2, n3);
-		cost_end();
+		if(snapshot_blocksize > 1){
+			cost_start();
+			if(option == TRICUBIC) dec_data[i] = tricubic_interpolation(comp_data, snapshot_blocksize, n1, n2, n3);
+			else dec_data[i] = trilinear_interpolation(comp_data, snapshot_blocksize, n1, n2, n3);
+			cost_end();
+		}
+		else{
+			dec_data[i] = (Type *) malloc(sizeof(Type)*n1*n2*n3);
+			memcpy(dec_data[i], comp_data, sizeof(Type)*n1*n2*n3);
+		}
 		elapsed_time += totalCost;
 		index += interval;
 		total_size += comp_data_size*sizeof(Type);
@@ -388,6 +404,11 @@ void SZ_compress_snapshot_and_decimation_in_time(char * filename, int snapshot_n
 		writefile(strcat(filename_tmp, ".szsdt"), comp_data, out_size);
 		free(comp_data);
 		// skip interval_num snapshots
+		for(int j=0; j<interval-1; j++){
+			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
+			else sprintf(filename_tmp, "%s%d.bin.dat", filename, index++);
+			writefile(strcat(filename_tmp, ".szsdt"), ori_data, 0);
+		}
 		index += interval;
 		total_size += out_size;
 	}
