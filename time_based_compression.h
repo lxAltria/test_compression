@@ -286,12 +286,14 @@ void decimation_sample_in_time_and_space(char * filename, int snapshot_num, int 
 			writefile(strcat(filename_tmp, ".dst"), ori_data, sizeof(Type)*num_element);
 		}
 		// skip interval_num snapshots
+		index ++;
 		for(int j=0; j<interval-1; j++){
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat", filename, index++);
 			writefile(strcat(filename_tmp, ".dst"), ori_data, 0);
+			index ++;
 		}
-		index += interval;
+		// index += interval;
 	}
 	free(ori_data);
 	std::cout << "DST compression time: " << elapsed_time << " s, compression rate: " << n1*n2*n3 * sizeof(Type) * 1.0 * interval_num * interval / elapsed_time / 1024 / 1024 << " MB/s" << std::endl;
@@ -404,12 +406,14 @@ void SZ_compress_snapshot_and_decimation_in_time(char * filename, int snapshot_n
 		writefile(strcat(filename_tmp, ".szsdt"), comp_data, out_size);
 		free(comp_data);
 		// skip interval_num snapshots
+		index ++;
 		for(int j=0; j<interval-1; j++){
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat", filename, index++);
 			writefile(strcat(filename_tmp, ".szsdt"), ori_data, 0);
+			index ++;
 		}
-		index += interval;
+		// index += interval;
 		total_size += out_size;
 	}
 	free(ori_data);
