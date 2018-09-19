@@ -283,7 +283,7 @@ void decimation_sample_in_time_and_space(char * filename, int snapshot_num, int 
 			free(comp_data);
 		}
 		else{
-			writefile(strcat(filename_tmp, ".dst"), ori_data, sizeof(Type)*num_element);
+			writefile(strcat(filename_tmp, ".dst"), ori_data, num_element);
 		}
 		// skip interval_num snapshots
 		index ++;
