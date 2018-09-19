@@ -76,3 +76,18 @@ def sz_space_1D(index, option=0, mode=0, executable="/home/xin/codes/test_compre
         np.savetxt("{}_{}_{}_snapshot_cr.txt".format(var, option, mode), cr)
         np.savetxt("{}_{}_{}_snapshot_psnr.txt".format(var, option, mode), psnr)
         np.savetxt("{}_{}_{}_snapshot_nrmse.txt".format(var, option, mode), nrmse)
+
+def interpolation_in_time_1D(index, interval, mode, executable="/home/xin/codes/test_compression/compression_ts"):
+	directory = "/lcrc/project/ECP-EZ/public/compression/EXAALT_multisteps/drbsd_test/exaalt"
+	variables = np.array(["exaalt-x-", "exaalt-y-", "exaalt-z-"])
+	modes = np.array(["szst", "szsdt", "dsszt", "dst"])
+	var = variables[index]
+	interval_num = (83 - 1) // interval
+	actual_snapshot = interval_num * interval
+	os.system("{} {}/{} 1 1 1077290 83 {} 0 1 0 {}".format(executable, directory, var, interval, mode))
+	cr, psnr, nrmse, total_br, total_psnr = get_statistics_1D("{}/{}".format(directory, var), 83, interval, modes[mode])
+	np.savetxt("{}_{}_time_interval_{}_cr.txt".format(var, modes[mode], interval), cr)
+	np.savetxt("{}_{}_time_interval_{}_psnr.txt".format(var, modes[mode], interval), psnr)
+	np.savetxt("{}_{}_time_interval_{}_nrmse.txt".format(var, modes[mode], interval), nrmse)
+
+
