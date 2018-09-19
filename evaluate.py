@@ -50,7 +50,7 @@ def get_statistics_3D(var, snapshot_num, interval, mode):
 		br[i] = compressed_size * 32.0 / origin_size
 		psnr[i], nrmse[i] = get_psnr_and_nrmse(data, dec_data)
 		index += 1
-	return cr, psnr, nrmse
+	return br, psnr, nrmse
 
 def interpolation_in_space_1D(index, option, mode, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/EXAALT_multisteps/drbsd_test/exaalt"
