@@ -291,7 +291,6 @@ void decimation_sample_in_time_and_space(char * filename, int snapshot_num, int 
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat", filename, index++);
 			writefile(strcat(filename_tmp, ".dst"), ori_data, 0);
-			index ++;
 		}
 		// index += interval;
 	}
@@ -411,7 +410,6 @@ void SZ_compress_snapshot_and_decimation_in_time(char * filename, int snapshot_n
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
 			else sprintf(filename_tmp, "%s%d.bin.dat", filename, index++);
 			writefile(strcat(filename_tmp, ".szsdt"), ori_data, 0);
-			index ++;
 		}
 		// index += interval;
 		total_size += out_size;
