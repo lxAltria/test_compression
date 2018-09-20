@@ -234,6 +234,7 @@ def dsszt_1D(index, blocksize, eb, mode=2, executable="/home/xin/codes/test_comp
 def dst_1D(index, blocksize, interval, mode=3, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/EXAALT_multisteps/drbsd_test/exaalt"
 	variables = np.array(["exaalt-x-", "exaalt-y-", "exaalt-z-"])
+	modes = np.array(["szst", "szsdt", "dsszt", "dst"])
 	var = variables[index]
 	os.system("{} {}/{} 1 1 1077290 83 {} 0 {} 1 {}".format(executable, directory, var, interval, blocksize, mode))
 	br, psnr, nrmse = get_statistics_1D("{}/{}".format(directory, var), 83, interval, modes[mode])
