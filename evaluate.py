@@ -203,7 +203,7 @@ def dst_3D(index, blocksize, interval, mode=3, executable="/home/xin/codes/test_
 	options = np.array([1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
 	modes = np.array(["szst", "szsdt", "dsszt", "dst"])
 	var = variables[index]
-	os.system("{} {}/{} 100 500 500 48 {} 0 {} {} {}".format(executable, directory, var, blocksize, options[index], mode))
+	os.system("{} {}/{} 100 500 500 48 {} 0 {} {} {}".format(executable, directory, var, interval, blocksize, options[index], mode))
 	br, psnr, nrmse = get_statistics_3D("{}/{}".format(directory, var), 48, interval, modes[mode])
 	np.savetxt("{}_{}_time_blocksize_{}_interval_{}_br.txt".format(var, modes[mode], blocksize, interval), br)
 	np.savetxt("{}_{}_time_blocksize_{}_interval_{}_psnr.txt".format(var, modes[mode], blocksize, interval), psnr)
