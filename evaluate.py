@@ -215,7 +215,7 @@ def szsdt_1D(index, eb, interval, mode=1, executable="/home/xin/codes/test_compr
 	modes = np.array(["szst", "szsdt", "dsszt", "dst"])
 	var = variables[index]
 	os.system("{} {}/{} 1 1 1077290 83 {} {} 1 0 {}".format(executable, directory, var, interval, eb, mode))
-	br, psnr, nrmse = get_statistics_3D("{}/{}".format(directory, var), 83, interval, modes[mode])
+	br, psnr, nrmse = get_statistics_1D("{}/{}".format(directory, var), 83, interval, modes[mode])
 	np.savetxt("{}_{}_time_eb_{}_interval_{}_br.txt".format(var, modes[mode], eb, interval), br)
 	np.savetxt("{}_{}_time_eb_{}_interval_{}_psnr.txt".format(var, modes[mode], eb, interval), psnr)
 	np.savetxt("{}_{}_time_eb_{}_interval_{}_nrmse.txt".format(var, modes[mode], eb, interval), nrmse)
