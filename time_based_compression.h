@@ -323,8 +323,10 @@ void decimation_interpolate_in_time_and_space(char * filename, int snapshot_num,
 			cost_end();
 		}
 		else{
+			cost_start();
 			dec_data[i] = (Type *) malloc(sizeof(Type)*n1*n2*n3);
 			memcpy(dec_data[i], comp_data, sizeof(Type)*n1*n2*n3);
+			cost_end();
 		}
 		elapsed_time += totalCost;
 		index += interval;
@@ -524,24 +526,34 @@ void decimation_snapshot_and_SZ_compression_in_time(char * filename, int snapsho
 		// std::cout << "Interval " << i << ":\nsnapshot 0: " << filename_tmp <<  std::endl;
 		// compress the first snapshot
 		readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
-		cost_start();
-		comp_data = (unsigned char *) uniform_sampling(ori_data, snapshot_blocksize, n1, n2, n3, &out_size);
-		cost_end();
-		elapsed_time += totalCost;
-		writefile(strcat(filename_tmp, ".dsszt"), comp_data, out_size);
-		cost_start();
-		{
-			// decompression & record history
-			Type * dec_data;
-			if(option == TRICUBIC) dec_data = tricubic_interpolation((Type *)comp_data, snapshot_blocksize, n1, n2, n3);
-			else dec_data = trilinear_interpolation((Type *)comp_data, snapshot_blocksize, n1, n2, n3);
-			memcpy(multisteps->hist_data, dec_data, sizeof(Type)*dataLength);
-			free(dec_data);
+		if(snapshot_blocksize > 1){
+			cost_start();
+			comp_data = (unsigned char *) uniform_sampling(ori_data, snapshot_blocksize, n1, n2, n3, &out_size);
+			cost_end();
+			elapsed_time += totalCost;
+			writefile(strcat(filename_tmp, ".dsszt"), comp_data, out_size);
+			cost_start();
+			{
+				// decompression & record history
+				Type * dec_data;
+				if(option == TRICUBIC) dec_data = tricubic_interpolation((Type *)comp_data, snapshot_blocksize, n1, n2, n3);
+				else dec_data = trilinear_interpolation((Type *)comp_data, snapshot_blocksize, n1, n2, n3);
+				memcpy(multisteps->hist_data, dec_data, sizeof(Type)*dataLength);
+				free(dec_data);
+			}
+			cost_end();
+			elapsed_time += totalCost;
+			total_size += out_size;
+			free(comp_data);
 		}
-		cost_end();
-		elapsed_time += totalCost;
-		total_size += out_size;
-		free(comp_data);
+		else{
+			cost_start();
+			memcpy(multisteps->hist_data, ori_data, sizeof(Type)*dataLength);
+			cost_end();
+			writefile(strcat(filename_tmp, ".dsszt"), ori_data, sizeof(Type)*dataLength);
+			elapsed_time += totalCost;
+			total_size += out_size;
+		}
 		// compress the following interval-1 snapshot in time
 		for(int j=0; j<interval-1; j++){
 			if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index++);
@@ -599,26 +611,34 @@ void interpolate_snapshot_and_SZ_decompression_in_time(char * filename, int snap
 		// std::cout << "Decompression Interval " << i << ":\nsnapshot 0: " << filename_tmp <<  std::endl;
 		readfile_to_buffer<unsigned char>(filename_tmp, &comp_data_size, comp_data);
 		total_size += comp_data_size;
-		cost_start();
-		// decompress first snapshot
-		{
-			// decompression & record history
-			if(option == TRICUBIC) dec_data = tricubic_interpolation((Type *)comp_data, snapshot_blocksize, n1, n2, n3);
-			else dec_data = trilinear_interpolation((Type *)comp_data, snapshot_blocksize, n1, n2, n3);
-			memcpy(multisteps->hist_data, dec_data, sizeof(Type)*dataLength);
+		if(snapshot_blocksize > 1){
+			cost_start();
+			// decompress first snapshot
+			{
+				// decompression & record history
+				if(option == TRICUBIC) dec_data = tricubic_interpolation((Type *)comp_data, snapshot_blocksize, n1, n2, n3);
+				else dec_data = trilinear_interpolation((Type *)comp_data, snapshot_blocksize, n1, n2, n3);
+				memcpy(multisteps->hist_data, dec_data, sizeof(Type)*dataLength);
+			}
+			cost_end();
+			elapsed_time += totalCost;
+			writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
+			// {
+			// 	// verify
+			// 	if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
+			// 	else sprintf(filename_tmp, "%s%d.bin.dat", filename, index - 1);
+			// 	size_t num_element;
+			// 	readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
+			// 	verify(ori_data, dec_data, num_element, comp_data_size);
+			// }
+			free(dec_data);
 		}
-		cost_end();
-		elapsed_time += totalCost;
-		writefile<float>(strcat(filename_tmp, ".out"), dec_data, n1*n2*n3);
-		// {
-		// 	// verify
-		// 	if(index < 10) sprintf(filename_tmp, "%s0%d.bin.dat", filename, index - 1);
-		// 	else sprintf(filename_tmp, "%s%d.bin.dat", filename, index - 1);
-		// 	size_t num_element;
-		// 	readfile_to_buffer<float>(filename_tmp, &num_element, ori_data);
-		// 	verify(ori_data, dec_data, num_element, comp_data_size);
-		// }
-		free(dec_data);
+		else{
+			cost_start();
+			memcpy(multisteps->hist_data, comp_data, sizeof(Type)*n1*n2*n3);
+			cost_end();
+			elapsed_time += totalCost;
+		}
 		confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 		confparams_dec->predictionMode = SZ_PREVIOUS_VALUE_ESTIMATE;
 		for(int j=0; j<interval - 1; j++){
