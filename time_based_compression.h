@@ -552,7 +552,7 @@ void decimation_snapshot_and_SZ_compression_in_time(char * filename, int snapsho
 			cost_end();
 			writefile(strcat(filename_tmp, ".dsszt"), ori_data, sizeof(Type)*dataLength);
 			elapsed_time += totalCost;
-			total_size += out_size;
+			total_size += sizeof(Type)*dataLength;
 		}
 		// compress the following interval-1 snapshot in time
 		for(int j=0; j<interval-1; j++){
@@ -638,6 +638,7 @@ void interpolate_snapshot_and_SZ_decompression_in_time(char * filename, int snap
 			memcpy(multisteps->hist_data, comp_data, sizeof(Type)*n1*n2*n3);
 			cost_end();
 			elapsed_time += totalCost;
+			writefile<float>(strcat(filename_tmp, ".out"), (float *)comp_data, n1*n2*n3);
 		}
 		confparams_dec->szMode = SZ_TEMPORAL_COMPRESSION;
 		confparams_dec->predictionMode = SZ_PREVIOUS_VALUE_ESTIMATE;
