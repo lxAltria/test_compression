@@ -550,7 +550,7 @@ void decimation_snapshot_and_SZ_compression_in_time(char * filename, int snapsho
 			cost_start();
 			memcpy(multisteps->hist_data, ori_data, sizeof(Type)*dataLength);
 			cost_end();
-			writefile(strcat(filename_tmp, ".dsszt"), ori_data, sizeof(Type)*dataLength);
+			writefile(strcat(filename_tmp, ".dsszt"), ori_data, dataLength);
 			elapsed_time += totalCost;
 			total_size += sizeof(Type)*dataLength;
 		}
