@@ -174,6 +174,17 @@ def sz_in_time_3D(index, eb, mode=0, executable="/home/xin/codes/test_compressio
 	np.savetxt("{}_{}_time_eb_{}_psnr.txt".format(var, modes[mode], eb), psnr)
 	np.savetxt("{}_{}_time_eb_{}_nrmse.txt".format(var, modes[mode], eb), nrmse)
 
+def szst_3D(index, eb, mode=0, executable="/home/xin/codes/test_compression/compression_ts"):
+	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
+	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
+	modes = np.array(["szst", "szsdt", "dsszt", "dst"])
+	var = variables[index]
+	os.system("{} {}/{} 100 500 500 48 47 {} 1 0 {}".format(executable, directory, var, eb, mode))
+	br, psnr, nrmse = get_statistics_3D("{}/{}".format(directory, var), 48, 47, modes[mode])
+	np.savetxt("{}_{}_time_eb_{}_br.txt".format(var, modes[mode], eb), br)
+	np.savetxt("{}_{}_time_eb_{}_psnr.txt".format(var, modes[mode], eb), psnr)
+	np.savetxt("{}_{}_time_eb_{}_nrmse.txt".format(var, modes[mode], eb), nrmse)
+
 def szsdt_3D(index, eb, interval, mode=1, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
 	variables = np.array(["QCLOUDf", "QGRAUPf", "QICEf", "QRAINf", "QSNOWf", "QVAPORf", "PRECIPf", "CLOUDf", "TCf", "Pf", "Uf", "Vf", "Wf"])
