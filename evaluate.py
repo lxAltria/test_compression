@@ -181,9 +181,9 @@ def szst_3D(index, eb, interval, mode=0, executable="/home/xin/codes/test_compre
 	var = variables[index]
 	os.system("{} {}/{} 100 500 500 48 {} {} 1 0 {}".format(executable, directory, var, interval, eb, mode))
 	br, psnr, nrmse = get_statistics_3D("{}/{}".format(directory, var), 48, interval, modes[mode])
-	np.savetxt("{}_{}_time_eb_{}_br.txt".format(var, modes[mode], eb), br)
-	np.savetxt("{}_{}_time_eb_{}_psnr.txt".format(var, modes[mode], eb), psnr)
-	np.savetxt("{}_{}_time_eb_{}_nrmse.txt".format(var, modes[mode], eb), nrmse)
+	np.savetxt("{}_{}_time_eb_{}_interval_{}_br.txt".format(var, modes[mode], eb, interval), br)
+	np.savetxt("{}_{}_time_eb_{}_interval_{}_psnr.txt".format(var, modes[mode], eb, interval), psnr)
+	np.savetxt("{}_{}_time_eb_{}_interval_{}_nrmse.txt".format(var, modes[mode], eb, interval), nrmse)
 
 def szsdt_3D(index, eb, interval, mode=1, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/test_data/Hurricane"
@@ -227,9 +227,9 @@ def szst_1D(index, eb, interval, mode=0, executable="/home/xin/codes/test_compre
 	var = variables[index]
 	os.system("{} {}/{} 1 1 1077290 83 {} {} 1 0 {}".format(executable, directory, var, interval, eb, mode))
 	br, psnr, nrmse = get_statistics_1D("{}/{}".format(directory, var), 83, interval, modes[mode])
-	np.savetxt("{}_{}_time_eb_{}_br.txt".format(var, modes[mode], eb), br)
-	np.savetxt("{}_{}_time_eb_{}_psnr.txt".format(var, modes[mode], eb), psnr)
-	np.savetxt("{}_{}_time_eb_{}_nrmse.txt".format(var, modes[mode], eb), nrmse)
+	np.savetxt("{}_{}_time_eb_{}_interval_{}_br.txt".format(var, modes[mode], eb, interval), br)
+	np.savetxt("{}_{}_time_eb_{}_interval_{}_psnr.txt".format(var, modes[mode], eb, interval), psnr)
+	np.savetxt("{}_{}_time_eb_{}_interval_{}_nrmse.txt".format(var, modes[mode], eb, interval), nrmse)
 
 def szsdt_1D(index, eb, interval, mode=1, executable="/home/xin/codes/test_compression/compression_ts"):
 	directory = "/lcrc/project/ECP-EZ/public/compression/EXAALT_multisteps/drbsd_test/exaalt"
