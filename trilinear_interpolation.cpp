@@ -45,8 +45,8 @@ Type * trilinear_interpolation(Type * comp_data, int block_size, int n1, int n2,
 								c01 = comp_data[_get_index(i, j+1, k, nx, ny, nz, comp_strip0, comp_strip1)] * (1 - coeff[ii]) + comp_data[_get_index(i, j+1, k+1, nx, ny, nz, comp_strip0, comp_strip1)] * coeff[ii];
 								c10 = comp_data[_get_index(i+1, j, k, nx, ny, nz, comp_strip0, comp_strip1)] * (1 - coeff[ii]) + comp_data[_get_index(i+1, j, k+1, nx, ny, nz, comp_strip0, comp_strip1)] * coeff[ii];
 								c11 = comp_data[_get_index(i+1, j+1, k, nx, ny, nz, comp_strip0, comp_strip1)] * (1 - coeff[ii]) + comp_data[_get_index(i+1, j+1, k+1, nx, ny, nz, comp_strip0, comp_strip1)] * coeff[ii];
-								c0 = c00 * (1 - coeff[jj]) + c10 * coeff[jj];
-								c1 = c01 * (1 - coeff[jj]) + c11 * coeff[jj];
+								c0 = c00 * (1 - coeff[jj]) + c01 * coeff[jj];
+								c1 = c10 * (1 - coeff[jj]) + c11 * coeff[jj];
 	                            *(dec_data_pos++) = c0 * (1 - coeff[ii]) + c1 * coeff[ii];
 							}
 	                        dec_data_pos += dec_strip1 - bsk;
